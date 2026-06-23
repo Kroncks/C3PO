@@ -9,6 +9,8 @@ from tools import get_weather
 
 from livekit.agents import inference
 
+from livekit.agents.inference import TurnDetector
+
 
 # Charger variables d'environnement
 load_dotenv(".env")
@@ -29,6 +31,7 @@ server = AgentServer()
 @server.rtc_session()
 async def my_agent(ctx: agents.JobContext):
     session = AgentSession(
+        turn_detection=TurnDetector(),
         stt="deepgram/nova-2:fr",
         llm="google/gemini-2.5-flash",
         tts=inference.TTS(
