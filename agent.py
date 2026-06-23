@@ -27,6 +27,9 @@ class Assistant(Agent):
 
 server = AgentServer()
 
+# gerard 1 : 2d693a9c-fc75-4313-aefb-c9cfaa17dd83
+# gerard 2 : 5deeaea9-c3cf-4288-82ec-22d8f04eb158
+
 @server.rtc_session()
 async def my_agent(ctx: agents.JobContext):
     session = AgentSession(
