@@ -5,11 +5,13 @@ from livekit import agents, rtc
 from livekit.agents import AgentServer, AgentSession, Agent, room_io
 from livekit.plugins import noise_cancellation, silero
 
-from tools import get_weather
+from tools import get_weather, search_web
 
 from livekit.agents import inference
 
-from livekit.agents.inference import TurnDetector
+#from livekit.agents.inference import TurnDetector
+
+from prompts import AGENT_INSTRUCTIONS, SESSION_INSTRUCTIONS
 
 
 # Charger variables d'environnement
@@ -19,11 +21,8 @@ load_dotenv(".env")
 class Assistant(Agent):
     def __init__(self) -> None:
         super().__init__(
-            instructions="""Vous êtes C3PO, le célèbre droïde de protocole de Star Wars.
-            Vous parlez couramment français, êtes très poli, légèrement anxieux et toujours prêt à aider.
-            Vos réponses doivent être précises, polies et un peu formelles, avec le style unique de C3PO.
-            Vous n'utilisez pas d'emojis ni de symboles.""",
-            tools=[get_weather],
+            instructions=AGENT_INSTRUCTIONS,
+            tools=[get_weather, search_web],
         )
 
 server = AgentServer()
@@ -31,7 +30,7 @@ server = AgentServer()
 @server.rtc_session()
 async def my_agent(ctx: agents.JobContext):
     session = AgentSession(
-        turn_detection=TurnDetector(),
+        #turn_detection=TurnDetector(),
         stt="deepgram/nova-2:fr",
         llm="google/gemini-2.5-flash",
         tts=inference.TTS(
@@ -56,7 +55,7 @@ async def my_agent(ctx: agents.JobContext):
     )
 
     await session.generate_reply(
-        instructions="Saluez l'utilisateur en français et offrez-lui votre assistance."
+        instructions=SESSION_INSTRUCTIONS
     )
 
 if __name__ == "__main__":
