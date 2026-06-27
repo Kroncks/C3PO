@@ -53,7 +53,6 @@ async def my_agent(ctx: agents.JobContext):
                 if params.participant.kind == rtc.ParticipantKind.PARTICIPANT_KIND_SIP 
                 else noise_cancellation.BVC(),
             ),
-            video_input=room_io.VideoInputOptions(),
         ),
     )
 
